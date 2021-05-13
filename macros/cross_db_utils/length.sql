@@ -1,5 +1,5 @@
 {% macro length(expression) -%}
-    {{ adapter_macro('dbt_utils.length', expression) }}
+    {{ return(adapter.dispatch('length', packages = dbt_utils._get_utils_namespaces()) (expression)) }}
 {% endmacro %}
 
 

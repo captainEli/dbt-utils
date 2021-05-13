@@ -1,5 +1,5 @@
 {% macro except() %}
-  {{ adapter_macro('dbt_utils.except') }}
+  {{ return(adapter.dispatch('except', packages = dbt_utils._get_utils_namespaces())()) }}
 {% endmacro %}
 
 

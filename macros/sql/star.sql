@@ -1,6 +1,10 @@
 {% macro star(from, relation_alias=False, except=[]) -%}
+    {{ return(adapter.dispatch('star', packages = dbt_utils._get_utils_namespaces())(from, relation_alias, except)) }}
+{% endmacro %}
 
+{% macro default__star(from, relation_alias=False, except=[]) -%}
     {%- do dbt_utils._is_relation(from, 'star') -%}
+    {%- do dbt_utils._is_ephemeral(from, 'star') -%}
 
     {#-- Prevent querying of db in parsing mode. This works because this macro does not create any new refs. #}
     {%- if not execute -%}
@@ -9,6 +13,7 @@
 
     {%- set include_cols = [] %}
     {%- set cols = adapter.get_columns_in_relation(from) -%}
+
     {%- for col in cols -%}
 
         {%- if col.column not in except -%}
